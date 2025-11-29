@@ -135,7 +135,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
                 ohlcvCandlesForToken(
                     chain_name: HYPERCORE_MAINNET
                     token_addresses: ["HYPE"]
-                    interval: ONE_MINUTE
+                    interval: ONE_SECOND
                     timeframe: ONE_HOUR
                 ) {
                     chain_name

@@ -1,0 +1,243 @@
+{
+    "meta": {
+        "title": "Hyperliquid API Endpoints",
+        "version": "1.0",
+        "source": "Official Documentation & Community Resources",
+        "last_updated": "2025-11-29"
+    },
+    "base_urls": {
+        "mainnet": {
+            "rest": "https://api.hyperliquid.xyz",
+            "websocket": "wss://api.hyperliquid.xyz/ws"
+        },
+        "testnet": {
+            "rest": "https://api.hyperliquid-testnet.xyz",
+            "websocket": "wss://api.hyperliquid-testnet.xyz/ws"
+        }
+    },
+    "rest_api": {
+        "description": "All REST requests are POST requests to the base URL with a JSON body. The path is usually /info or /exchange.",
+        "endpoints": [
+            {
+                "path": "/info",
+                "method": "POST",
+                "access": "Public",
+                "description": "Read-only market data and user state.",
+                "payload_types": [
+                    {
+                        "type": "meta",
+                        "description": "Get universe of assets and metadata (max leverage, decimals, etc.)",
+                        "example_payload": {
+                            "type": "meta"
+                        }
+                    },
+                    {
+                        "type": "allMids",
+                        "description": "Get current mid prices for all coins",
+                        "example_payload": {
+                            "type": "allMids"
+                        }
+                    },
+                    {
+                        "type": "l2Book",
+                        "description": "Get L2 order book snapshot",
+                        "example_payload": {
+                            "type": "l2Book",
+                            "coin": "ETH"
+                        }
+                    },
+                    {
+                        "type": "candleSnapshot",
+                        "description": "Get historical candles",
+                        "example_payload": {
+                            "type": "candleSnapshot",
+                            "req": {
+                                "coin": "ETH",
+                                "interval": "1h",
+                                "startTime": 1678888888000,
+                                "endTime": 1678999999000
+                            }
+                        }
+                    },
+                    {
+                        "type": "userState",
+                        "description": "Get user portfolio state (balances, positions, margin)",
+                        "example_payload": {
+                            "type": "userState",
+                            "user": "0x..."
+                        }
+                    },
+                    {
+                        "type": "openOrders",
+                        "description": "Get open orders for a user",
+                        "example_payload": {
+                            "type": "openOrders",
+                            "user": "0x..."
+                        }
+                    },
+                    {
+                        "type": "userFills",
+                        "description": "Get trade history for a user",
+                        "example_payload": {
+                            "type": "userFills",
+                            "user": "0x..."
+                        }
+                    },
+                    {
+                        "type": "fundingHistory",
+                        "description": "Get historical funding rates",
+                        "example_payload": {
+                            "type": "fundingHistory",
+                            "coin": "ETH",
+                            "startTime": 1678888888000
+                        }
+                    }
+                ]
+            },
+            {
+                "path": "/exchange",
+                "method": "POST",
+                "access": "Private (Signed)",
+                "description": "Execute trades, cancel orders, and manage account transfers. Requires signature.",
+                "payload_types": [
+                    {
+                        "type": "order",
+                        "description": "Place new orders",
+                        "example_payload": {
+                            "type": "order",
+                            "orders": [
+                                {
+                                    "a": 0,
+                                    "b": true,
+                                    "p": "1800.5",
+                                    "s": "0.1",
+                                    "r": false,
+                                    "t": {
+                                        "limit": {
+                                            "tif": "Gtc"
+                                        }
+                                    }
+                                }
+                            ],
+                            "grouping": "na"
+                        }
+                    },
+                    {
+                        "type": "cancel",
+                        "description": "Cancel orders",
+                        "example_payload": {
+                            "type": "cancel",
+                            "cancels": [
+                                {
+                                    "a": 0,
+                                    "o": 123456
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "modify",
+                        "description": "Modify an existing order",
+                        "example_payload": {
+                            "type": "modify",
+                            "oid": 123456,
+                            "order": {
+                                "a": 0,
+                                "b": true,
+                                "p": "1801.0",
+                                "s": "0.1",
+                                "r": false,
+                                "t": {
+                                    "limit": {
+                                        "tif": "Gtc"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "type": "usdTransfer",
+                        "description": "Transfer USDC between Spot and Perp accounts",
+                        "example_payload": {
+                            "type": "usdTransfer",
+                            "chain": "Arbitrum",
+                            "amount": "100.0",
+                            "destination": "0x..."
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "websocket_api": {
+        "description": "Real-time data streaming. Send a JSON message with method: 'subscribe' to start receiving data.",
+        "connection_url": "wss://api.hyperliquid.xyz/ws",
+        "subscription_method": "subscribe",
+        "channels": [
+            {
+                "channel": "trades",
+                "description": "Real-time trades for a specific coin",
+                "payload": {
+                    "type": "trades",
+                    "coin": "ETH"
+                }
+            },
+            {
+                "channel": "l2Book",
+                "description": "Real-time L2 order book updates",
+                "payload": {
+                    "type": "l2Book",
+                    "coin": "ETH"
+                }
+            },
+            {
+                "channel": "candle",
+                "description": "Real-time OHLCV candles",
+                "payload": {
+                    "type": "candle",
+                    "coin": "ETH",
+                    "interval": "1m"
+                }
+            },
+            {
+                "channel": "allMids",
+                "description": "Stream of all mid prices (updates every second)",
+                "payload": {
+                    "type": "allMids"
+                }
+            },
+            {
+                "channel": "userEvents",
+                "description": "User specific events (fills, order updates, liquidations)",
+                "payload": {
+                    "type": "userEvents",
+                    "user": "0x..."
+                }
+            },
+            {
+                "channel": "userFills",
+                "description": "Stream of user fills",
+                "payload": {
+                    "type": "userFills",
+                    "user": "0x..."
+                }
+            },
+            {
+                "channel": "webData2",
+                "description": "Comprehensive user state stream (used by official frontend)",
+                "payload": {
+                    "type": "webData2",
+                    "user": "0x..."
+                }
+            },
+            {
+                "channel": "orderUpdates",
+                "description": "Stream of order status updates",
+                "payload": {
+                    "type": "orderUpdates",
+                    "user": "0x..."
+                }
+            }
+        ]
+    }
+}

@@ -240,8 +240,8 @@ const GoldRushHyperliquidUI: React.FC = () => {
     const formatTime = (ts: number) => new Date(ts).toLocaleTimeString();
 
     return (
-        <div className="p-6 bg-slate-100 min-h-screen font-sans text-slate-900">
-            <header className="mb-6 flex justify-between items-center">
+        <div className="p-4 md:p-6 bg-slate-100 min-h-screen font-sans text-slate-900">
+            <header className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
                 <div>
                     <h1 className="text-2xl font-bold flex items-center gap-2">
                         <Activity className="text-blue-600" />
@@ -249,7 +249,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
                     </h1>
                     <p className="text-slate-500">Side-by-side OHLCV Comparison</p>
                 </div>
-                <div className="flex gap-4 text-sm">
+                <div className="flex flex-wrap gap-4 text-sm w-full md:w-auto">
                     <div className="bg-white px-3 py-1 rounded shadow-sm">
                         <span className="font-semibold">Token:</span> {TOKEN_SYMBOL}
                     </div>
@@ -261,7 +261,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
 
             <main className="grid grid-cols-12 gap-6">
                 {/* Left: Hyperliquid */}
-                <section className="col-span-6 bg-white rounded-2xl shadow-lg p-4 border border-slate-200">
+                <section className="col-span-12 lg:col-span-6 bg-white rounded-2xl shadow-lg p-4 border border-slate-200">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="font-bold text-lg flex items-center gap-2">
                             <Zap className="text-yellow-500" size={20} />
@@ -297,7 +297,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
                 </section>
 
                 {/* Right: GoldRush */}
-                <section className="col-span-6 bg-white rounded-2xl shadow-lg p-4 border border-slate-200">
+                <section className="col-span-12 lg:col-span-6 bg-white rounded-2xl shadow-lg p-4 border border-slate-200">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="font-bold text-lg flex items-center gap-2">
                             <Activity className="text-blue-600" size={20} />
@@ -340,7 +340,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
                     <h3 className="font-bold mb-3 flex items-center gap-2">
                         <AlertTriangle size={18} /> Comparator & Logs
                     </h3>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="col-span-1 bg-slate-50 p-4 rounded-lg">
                             <div className="text-sm text-slate-500 mb-1">Candle Match %</div>
                             <div className="text-2xl font-bold">{metrics.matchedPct}%</div>
@@ -348,7 +348,7 @@ const GoldRushHyperliquidUI: React.FC = () => {
                             <div className="text-sm text-slate-500 mt-3 mb-1">Mean Price Diff (bps)</div>
                             <div className="text-2xl font-bold">{metrics.meanPriceBps.toFixed(2)}</div>
                         </div>
-                        <div className="col-span-2 bg-black text-green-400 font-mono text-xs p-3 rounded-lg h-40 overflow-y-auto">
+                        <div className="col-span-1 md:col-span-2 bg-black text-green-400 font-mono text-xs p-3 rounded-lg h-40 overflow-y-auto">
                             {logs.map((l, i) => (
                                 <div key={i}>&gt; {l}</div>
                             ))}
